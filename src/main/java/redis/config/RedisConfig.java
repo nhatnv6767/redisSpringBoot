@@ -4,7 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import redis.pubsub.RedisMessageSubscriber;
 
 @Configuration
 public class RedisConfig {
@@ -22,5 +24,15 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisMessageListenerContainer redisContainer(RedisMessageSubscriber messageSubscriber) {}
+    public RedisMessageListenerContainer redisContainer(RedisMessageSubscriber messageSubscriber) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(jedisConnectionFactory());
+        container.addMessageListener(messageSubscriber, topic());
+        return container;
+    }
+
+    @Bean
+    public ChannelTopic topic() {
+        return new ChannelTopic("hello-world");
+    }
 }
