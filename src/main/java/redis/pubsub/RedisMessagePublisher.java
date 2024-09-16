@@ -8,10 +8,11 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class RedisMessagePublisher {
+
     private final RedisTemplate<String, Object> redisTemplate;
     private final ChannelTopic topic;
 
-    public void publish(String message){
+    public void publish(String message) {
         redisTemplate.convertAndSend(topic.getTopic(), message);
     }
 }

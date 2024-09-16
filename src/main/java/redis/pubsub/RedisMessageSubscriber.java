@@ -10,10 +10,11 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class RedisMessageSubscriber implements MessageListener {
+
     private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public void onMessage(Message message, byte[] pattern){
+    public void onMessage(Message message, byte[] pattern) {
         RedisSerializer<?> serializer = redisTemplate.getDefaultSerializer();
         assert serializer != null;
         Object messageBody = serializer.deserialize(message.getBody());
